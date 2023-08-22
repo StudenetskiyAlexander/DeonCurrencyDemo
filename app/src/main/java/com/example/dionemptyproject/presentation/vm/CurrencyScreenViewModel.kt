@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.dionemptyproject.data.CurrenciesVolleyRepository
 import com.example.dionemptyproject.data.CurrenciesRetrofitRepository
-import com.example.dionemptyproject.presentation.entity.Currencies
-import com.example.dionemptyproject.presentation.entity.CurrencyRate
+import com.example.dionemptyproject.domain.entity.Currencies
+import com.example.dionemptyproject.domain.entity.CurrencyRate
 import com.example.dionemptyproject.presentation.entity.CurrencyScreenState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +18,7 @@ internal class CurrencyScreenViewModel(
 ) : ViewModel() {
 
     //TODO Через DI
-    private val repository = CurrenciesVolleyRepository()
+    private val repositoryValley = CurrenciesVolleyRepository()
     private val repositoryRetrofit = CurrenciesRetrofitRepository()
 
     private val allCurrencies = listOf(Currencies.RUB, Currencies.USD, Currencies.EUR)
@@ -42,15 +42,12 @@ internal class CurrencyScreenViewModel(
     suspend fun updateSingleCurrencyRate(currency: Currencies) {
         _state.value = getStateChangeSingleCurrencyState(_state.value, CurrencyRate.Loading(currency))
 
-//        repository.getCurrencyData(context, currency) { newRate ->
+//        repositoryValley.getCurrencyData(context, currency) { newRate ->
 //            _state.value = getStateChangeSingleCurrencyState(
 //                oldState = _state.value,
 //                newRate = newRate
 //            )
 //        }
-         val newRate =  repositoryRetrofit.getCurrencyData(currency)
-        Log.d("skyfolk", "repositoryRetrofit: $newRate")
-
 
         _state.value = getStateChangeSingleCurrencyState(
             oldState = _state.value,
